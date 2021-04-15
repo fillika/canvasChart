@@ -16,3 +16,14 @@ img,
 svg {
   width: 100%;
 }
+
+.canvas-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  canvas {
+      border: 1px solid var(--text-main-color);
+  }
+}
