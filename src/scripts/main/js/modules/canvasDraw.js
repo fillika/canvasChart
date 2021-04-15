@@ -1,38 +1,56 @@
 import { getMinMax } from './utils';
 
 function draw(ctx, data, config) {
-  // draw line
-  drawLine(ctx, data, config);
+  const { viewHeight } = config;
+
+  data.forEach(dataArr => {
+    const [yMin, yMax] = getMinMax(dataArr);
+
+    if (yMin < config.yMin) {
+      config.yMin = yMin;
+    }
+
+    if (yMax > config.yMax) {
+      config.yMax = yMax;
+    }
+  });
+
+  config.yRatio = viewHeight / (config.yMax - config.yMin);
 
   // draw horizontal lines asisY
-  drawHorizontalLines(ctx, data, config);
+  drawHorizontalLines(ctx, config);
 
+  // draw line
+  data.forEach(dataArr => {
+    drawLine(ctx, dataArr, config);
+  });
   // draw vertical line
 
   // draw asisX
 }
 
 function drawLine(ctx, data, config) {
-  const { innerHeight, padding, viewHeight } = config;
-  const [yMin, yMax] = getMinMax(data);
-  const yRatio = viewHeight / (yMax - yMin);
-  console.log(yRatio);
+  const { innerHeight, padding, yRatio, viewWidth } = config;
+
+  const xxx = viewWidth / data.length; // TODO Посчитать ratio
+  const xRatio = 10.446428571428571;
 
   ctx.beginPath();
   ctx.strokeStyle = 'red';
   ctx.lineWidth = 3;
 
   for (const [x, y] of data) {
-    ctx.lineTo(x, innerHeight - padding - y * yRatio);
+    const yCoord = innerHeight - padding - y * yRatio;
+    const xCoord = x * xRatio;
+    ctx.lineTo(xCoord, yCoord);
   }
 
   ctx.stroke();
   ctx.closePath();
 }
 
-function drawHorizontalLines(ctx, data, config) {
-  const { rowsCount, innerWidth, viewHeight, padding } = config;
-  const [yMin, yMax] = getMinMax(data);
+function drawHorizontalLines(ctx, config) {
+  const { innerWidth, viewHeight, rowsCount, padding, yMin, yMax } = config;
   const step = viewHeight / rowsCount;
   const textStep = (yMax - yMin) / rowsCount;
 
@@ -44,7 +62,8 @@ function drawHorizontalLines(ctx, data, config) {
 
   for (let j = 1; j <= rowsCount; j++) {
     const y = step * j + padding;
-    const text = yMax - textStep * j;
+    const text = Math.round(yMax - textStep * j);
+
     ctx.fillText(text, 5, y - 5);
     ctx.moveTo(0, y);
     ctx.lineTo(innerWidth, y);

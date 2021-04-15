@@ -1,6 +1,9 @@
 class CreateConfig {
   constructor({ width, height, rowsCount, padding }) {
     this.dpi = 2;
+    this.yMin = 0;
+    this.yMax = 0;
+    this.yRatio = 1;
     this.width = width;
     this.height = height;
     this.padding = padding;
