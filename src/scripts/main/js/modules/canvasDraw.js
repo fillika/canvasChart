@@ -13,14 +13,17 @@ function draw(ctx, data, config) {
 }
 
 function drawLine(ctx, data, config) {
-  const { innerHeight, padding } = config;
+  const { innerHeight, padding, viewHeight } = config;
+  const [yMin, yMax] = getMinMax(data);
+  const yRatio = viewHeight / (yMax - yMin);
+  console.log(yRatio);
 
   ctx.beginPath();
   ctx.strokeStyle = 'red';
   ctx.lineWidth = 3;
 
   for (const [x, y] of data) {
-    ctx.lineTo(x, innerHeight - y - padding);
+    ctx.lineTo(x, innerHeight - padding - y * yRatio);
   }
 
   ctx.stroke();
