@@ -6,4 +6,18 @@ function setStyles(canvas, config) {
   canvas.height = innerHeight;
 }
 
-export { setStyles };
+function getMinMax(data) {
+  let min, max;
+
+  for (const [_, y] of data) {
+    if (typeof min !== 'number') min = y;
+    if (typeof max !== 'number') max = y;
+
+    if (min > y) min = y;
+    if (max < y) max = y;
+  }
+
+  return [min, max];
+}
+
+export { setStyles, getMinMax };

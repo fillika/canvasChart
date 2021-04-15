@@ -3,7 +3,14 @@ import { CreateConfig } from './modules/CreateConfig';
 import { mockData } from './modules/data';
 import { setStyles } from './modules/utils';
 
-init('#chart', { width: 600, height: 300 }, mockData);
+const config = {
+  width: 600,
+  height: 250,
+  rowsCount: 5,
+  padding: 15,
+};
+
+init('#chart', config, mockData);
 
 function init(selector, params, data) {
   const canvas = document.querySelector(selector);
@@ -12,5 +19,5 @@ function init(selector, params, data) {
 
   setStyles(canvas, config);
 
-  draw(canvas, ctx, data);
+  draw(ctx, data, config);
 }
