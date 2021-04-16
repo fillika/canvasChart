@@ -1,8 +1,8 @@
 import { getMinMax } from './utils';
 
 function draw(ctx, data, config) {
-  const { viewHeight, viewWidth } = config;
-  const {yLines, xLines} = data;
+  const { viewHeight, viewWidth, dpi } = config;
+  const { yLines, xLines, columnsCount } = data;
 
   console.log(data);
   yLines.forEach(dataArr => {
@@ -18,11 +18,15 @@ function draw(ctx, data, config) {
   });
 
   config.yRatio = viewHeight / (config.yMax - config.yMin);
-  config.xRatio = viewWidth / (xLines.length - 2);
+  config.xRatio = viewWidth / (xLines.length - 2 * dpi);
 
   // draw horizontal lines asisY
   drawHorizontalLines(ctx, config);
 
+  //drawVerticalLines
+  drawVerticalLines(ctx, config);
+
+  drawXLineText(ctx, config);
   // draw line
   yLines.forEach(dataArr => {
     drawLine(ctx, dataArr, config);
@@ -32,8 +36,8 @@ function draw(ctx, data, config) {
   // draw asisX
 }
 
-function drawLine(ctx, {coords, color}, config) {
-  const { innerHeight, padding, yRatio,xRatio } = config;
+function drawLine(ctx, { coords, color }, config) {
+  const { innerHeight, padding, yRatio, xRatio } = config;
 
   ctx.beginPath();
   ctx.strokeStyle = color;
@@ -41,7 +45,7 @@ function drawLine(ctx, {coords, color}, config) {
 
   for (const [x, y] of coords) {
     const yCoord = innerHeight - padding - y * yRatio;
-    const xCoord = x * xRatio;
+    const xCoord = x * xRatio - padding;
     ctx.lineTo(xCoord, yCoord);
   }
 
@@ -66,10 +70,49 @@ function drawHorizontalLines(ctx, config) {
 
     ctx.fillText(text, 5, y - 5);
     ctx.moveTo(0, y);
-    ctx.lineTo(innerWidth, y);
+    ctx.lineTo(innerWidth - padding, y);
   }
 
   ctx.stroke();
   ctx.closePath();
 }
+
+function drawVerticalLines(ctx, config) {
+  const { viewHeight, viewWidth, columnsCount, padding } = config;
+  const step = viewWidth / columnsCount;
+
+  ctx.beginPath();
+  ctx.strokeStyle = '#bbb';
+  ctx.lineWidth = 1;
+
+  for (let j = 1; j <= columnsCount; j++) {
+    const x = Math.floor(step * j);
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, viewHeight + padding);
+  }
+
+  ctx.stroke();
+  ctx.closePath();
+}
+
+function drawXLineText(ctx, config) {
+  const { viewHeight, viewWidth, columnsCount, padding, dpi } = config;
+  const step = viewWidth / columnsCount;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.font = 'normal 20px Helvetica, sans-serif';
+  ctx.fillStyle = '#fff';
+  ctx.save();
+  
+  for (let j = 1; j <= columnsCount; j++) {
+    const x = Math.floor(step * j + padding);
+    ctx.fillText('15:35', x - padding * 2, viewHeight + padding * 2);
+  }
+  ctx.restore();
+
+  ctx.stroke();
+  ctx.closePath();
+}
+
 export { draw };

@@ -21,9 +21,8 @@ svg {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-
-  canvas {
-    //   border: 1px solid var(--text-main-color);
-  }
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  height: 250px;
 }

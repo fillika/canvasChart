@@ -3,25 +3,39 @@ import { CreateConfig } from './modules/CreateConfig';
 import { tgData } from './modules/data';
 import { setStyles } from './modules/utils';
 
+const canvas = document.getElementById('chart')
 const config = {
-  width: 600,
-  height: 250,
+  width: canvas.parentElement.getBoundingClientRect().width,
+  height: canvas.parentElement.getBoundingClientRect().height,
   rowsCount: 5,
-  padding: 15,
+  columnsCount: 10,
+  padding: 35,
 };
+
 
 const data = parseData(tgData);
 
-init('#chart', config, data);
+init(canvas, config, data);
 
-function init(selector, params, data) {
-  const canvas = document.querySelector(selector);
+function init(canvas, params, data) {
   const ctx = canvas.getContext('2d');
-  const config = new CreateConfig(params);
 
-  setStyles(canvas, config);
+  set(params);
 
-  draw(ctx, data, config);
+  window.addEventListener('resize', function (e) {
+    params.width = canvas.parentElement.getBoundingClientRect().width;
+    params.height = canvas.parentElement.getBoundingClientRect().height,
+    set(config);
+  });
+
+  function set(params) {
+    const config = new CreateConfig(params);
+    ctx.clearRect(0, 0, config.width, config.height);
+
+    setStyles(canvas, config);
+
+    draw(ctx, data, config);
+  }
 }
 
 function parseData(data) {
