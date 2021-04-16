@@ -7,8 +7,8 @@ const canvas = document.getElementById('chart')
 const config = {
   width: canvas.parentElement.getBoundingClientRect().width,
   height: canvas.parentElement.getBoundingClientRect().height,
-  rowsCount: 3,
-  columnsCount: 8,
+  rowsCount: 6,
+  columnsCount: Math.round(canvas.parentElement.getBoundingClientRect().width / 80),
   padding: 35,
 };
 
@@ -26,6 +26,7 @@ function init(canvas, params, data) {
   window.addEventListener('resize', function (e) {
     params.width = canvas.parentElement.getBoundingClientRect().width;
     params.height = canvas.parentElement.getBoundingClientRect().height,
+    params.columnsCount = Math.round(canvas.parentElement.getBoundingClientRect().width / 80),
     set(config);
   });
 

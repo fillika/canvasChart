@@ -1,10 +1,9 @@
 import { getMinMax } from './utils';
 
 function draw(ctx, data, config) {
-  const { viewHeight, viewWidth, dpi } = config;
-  const { yLines, xLines, columnsCount } = data;
+  const { viewHeight, viewWidth, dpi, padding } = config;
+  const { yLines, xLines } = data;
 
-  console.log(data);
   yLines.forEach(dataArr => {
     const [yMin, yMax] = getMinMax(dataArr.coords);
 
@@ -18,7 +17,7 @@ function draw(ctx, data, config) {
   });
 
   config.yRatio = viewHeight / (config.yMax - config.yMin);
-  config.xRatio = viewWidth / (xLines.length - 2 * dpi);
+  config.xRatio = viewWidth / xLines.length;
 
   // draw horizontal lines asisY
   drawHorizontalLines(ctx, config);
@@ -45,7 +44,7 @@ function drawLine(ctx, { coords, color }, config) {
 
   for (const [x, y] of coords) {
     const yCoord = innerHeight - padding - y * yRatio;
-    const xCoord = x * xRatio - padding;
+    const xCoord = x * xRatio + padding;
     ctx.lineTo(xCoord, yCoord);
   }
 
@@ -64,12 +63,12 @@ function drawHorizontalLines(ctx, config) {
   ctx.font = 'normal 20px Helvetica, sans-serif';
   ctx.fillStyle = '#fff';
 
-  for (let j = 1; j <= rowsCount; j++) {
+  for (let j = 0; j <= rowsCount; j++) {
     const y = step * j + padding;
     const text = Math.round(yMax - textStep * j);
 
-    ctx.fillText(text, 5, y - 5);
-    ctx.moveTo(0, y);
+    ctx.fillText(text, 5 + padding, y - 5);
+    ctx.moveTo(0 + padding, y);
     ctx.lineTo(innerWidth - padding, y);
   }
 
@@ -87,8 +86,9 @@ function drawVerticalLines(ctx, config) {
 
   for (let j = 0; j <= columnsCount; j++) {
     const x = Math.floor(step * j);
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, viewHeight + padding);
+
+    ctx.moveTo(x + padding, 0 + padding);
+    ctx.lineTo(x + padding, viewHeight + padding);
   }
 
   ctx.stroke();
@@ -104,10 +104,10 @@ function drawXLineText(ctx, config) {
   ctx.beginPath();
   ctx.font = 'normal 20px Helvetica, sans-serif';
   ctx.fillStyle = '#fff';
-  
+
   for (let j = 0; j <= columnsCount; j++) {
     const x = Math.floor(step * j + padding);
-    ctx.fillText('15:35', x - padding * 2, viewHeight + padding * 2);
+    ctx.fillText('15:35', x - padding / 2, viewHeight + padding * 2);
   }
 
   ctx.stroke();
