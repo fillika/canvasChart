@@ -9,9 +9,10 @@ class CreateConfig {
     this.padding = padding;
     this.innerWidth = this.width * this.dpi;
     this.innerHeight = this.height * this.dpi;
-    this.viewWidth = this.innerWidth - this.padding * 2;
+    this.viewWidth = this.innerWidth - this.padding;
     this.viewHeight = this.innerHeight - this.padding * 2;
     this.rowsCount = rowsCount;
+    this.xCoords = [];
   }
 }
 

@@ -1,10 +1,12 @@
 import { getMinMax } from './utils';
 
 function draw(ctx, data, config) {
-  const { viewHeight } = config;
+  const { viewHeight, viewWidth } = config;
+  const {yLines, xLines} = data;
 
-  data.forEach(dataArr => {
-    const [yMin, yMax] = getMinMax(dataArr);
+  console.log(data);
+  yLines.forEach(dataArr => {
+    const [yMin, yMax] = getMinMax(dataArr.coords);
 
     if (yMin < config.yMin) {
       config.yMin = yMin;
@@ -16,12 +18,13 @@ function draw(ctx, data, config) {
   });
 
   config.yRatio = viewHeight / (config.yMax - config.yMin);
+  config.xRatio = viewWidth / (xLines.length - 2);
 
   // draw horizontal lines asisY
   drawHorizontalLines(ctx, config);
 
   // draw line
-  data.forEach(dataArr => {
+  yLines.forEach(dataArr => {
     drawLine(ctx, dataArr, config);
   });
   // draw vertical line
@@ -29,17 +32,14 @@ function draw(ctx, data, config) {
   // draw asisX
 }
 
-function drawLine(ctx, data, config) {
-  const { innerHeight, padding, yRatio, viewWidth } = config;
-
-  const xxx = viewWidth / data.length; // TODO Посчитать ratio
-  const xRatio = 10.446428571428571;
+function drawLine(ctx, {coords, color}, config) {
+  const { innerHeight, padding, yRatio,xRatio } = config;
 
   ctx.beginPath();
-  ctx.strokeStyle = 'red';
+  ctx.strokeStyle = color;
   ctx.lineWidth = 3;
 
-  for (const [x, y] of data) {
+  for (const [x, y] of coords) {
     const yCoord = innerHeight - padding - y * yRatio;
     const xCoord = x * xRatio;
     ctx.lineTo(xCoord, yCoord);

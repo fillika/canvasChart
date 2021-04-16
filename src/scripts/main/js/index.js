@@ -1,6 +1,6 @@
 import { draw } from './modules/canvasDraw';
 import { CreateConfig } from './modules/CreateConfig';
-import { mockData, tgData } from './modules/data';
+import { tgData } from './modules/data';
 import { setStyles } from './modules/utils';
 
 const config = {
@@ -26,13 +26,23 @@ function init(selector, params, data) {
 
 function parseData(data) {
   const { columns, types, names, colors } = data;
-  const result = [];
+  const result = {
+    yLines: [],
+    xLines: [],
+  };
 
   columns.forEach((element, i) => {
     const [type, ...rest] = element;
 
     if (types[type] === 'line') {
-      result.push(rest.map((num, idx) => [idx, num]));
+      result.yLines.push({
+        color: colors[type],
+        coords: rest.map((num, idx) => [idx, num]),
+      });
+    }
+
+    if (types[type] === 'x') {
+      result.xLines = rest;
     }
   });
 
