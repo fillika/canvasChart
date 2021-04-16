@@ -7,8 +7,8 @@ const canvas = document.getElementById('chart')
 const config = {
   width: canvas.parentElement.getBoundingClientRect().width,
   height: canvas.parentElement.getBoundingClientRect().height,
-  rowsCount: 5,
-  columnsCount: 10,
+  rowsCount: 3,
+  columnsCount: 8,
   padding: 35,
 };
 
@@ -19,6 +19,7 @@ init(canvas, config, data);
 
 function init(canvas, params, data) {
   const ctx = canvas.getContext('2d');
+  params.xCoords = data.xLines;
 
   set(params);
 

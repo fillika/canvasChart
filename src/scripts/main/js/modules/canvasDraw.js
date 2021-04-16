@@ -85,7 +85,7 @@ function drawVerticalLines(ctx, config) {
   ctx.strokeStyle = '#bbb';
   ctx.lineWidth = 1;
 
-  for (let j = 1; j <= columnsCount; j++) {
+  for (let j = 0; j <= columnsCount; j++) {
     const x = Math.floor(step * j);
     ctx.moveTo(x, 0);
     ctx.lineTo(x, viewHeight + padding);
@@ -96,20 +96,19 @@ function drawVerticalLines(ctx, config) {
 }
 
 function drawXLineText(ctx, config) {
-  const { viewHeight, viewWidth, columnsCount, padding, dpi } = config;
+  const { viewHeight, viewWidth, columnsCount, padding, xCoords } = config;
   const step = viewWidth / columnsCount;
 
+  console.log(config);
   ctx.save();
   ctx.beginPath();
   ctx.font = 'normal 20px Helvetica, sans-serif';
   ctx.fillStyle = '#fff';
-  ctx.save();
   
-  for (let j = 1; j <= columnsCount; j++) {
+  for (let j = 0; j <= columnsCount; j++) {
     const x = Math.floor(step * j + padding);
     ctx.fillText('15:35', x - padding * 2, viewHeight + padding * 2);
   }
-  ctx.restore();
 
   ctx.stroke();
   ctx.closePath();
