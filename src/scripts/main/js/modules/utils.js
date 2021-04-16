@@ -20,4 +20,24 @@ function getMinMax(data) {
   return [min, max];
 }
 
-export { setStyles, getMinMax };
+function toDate(timestamp) {
+  const shortMonth = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const date = new Date(timestamp);
+  return `${shortMonth[date.getMonth()]} ${date.getDate()}`;
+}
+
+export { setStyles, getMinMax, toDate };

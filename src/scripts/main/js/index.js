@@ -25,17 +25,16 @@ function init(canvas, params, data) {
 
   window.addEventListener('resize', function (e) {
     params.width = canvas.parentElement.getBoundingClientRect().width;
-    params.height = canvas.parentElement.getBoundingClientRect().height,
-    params.columnsCount = Math.round(canvas.parentElement.getBoundingClientRect().width / 80),
+    params.height = canvas.parentElement.getBoundingClientRect().height;
+    params.columnsCount = Math.round(canvas.parentElement.getBoundingClientRect().width / 80);
     set(config);
   });
 
   function set(params) {
     const config = new CreateConfig(params);
-    ctx.clearRect(0, 0, config.width, config.height);
+    // ctx.clearRect(0, 0, config.width, config.height);
 
     setStyles(canvas, config);
-
     draw(ctx, data, config);
   }
 }

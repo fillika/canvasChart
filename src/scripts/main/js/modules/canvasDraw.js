@@ -1,7 +1,7 @@
-import { getMinMax } from './utils';
+import { getMinMax, toDate } from './utils';
 
 function draw(ctx, data, config) {
-  const { viewHeight, viewWidth, dpi, padding } = config;
+  const { viewHeight, viewWidth } = config;
   const { yLines, xLines } = data;
 
   yLines.forEach(dataArr => {
@@ -18,6 +18,7 @@ function draw(ctx, data, config) {
 
   config.yRatio = viewHeight / (config.yMax - config.yMin);
   config.xRatio = viewWidth / xLines.length;
+  config.xCoords = xLines;
 
   // draw horizontal lines asisY
   drawHorizontalLines(ctx, config);
@@ -25,11 +26,12 @@ function draw(ctx, data, config) {
   //drawVerticalLines
   drawVerticalLines(ctx, config);
 
-  drawXLineText(ctx, config);
   // draw line
   yLines.forEach(dataArr => {
     drawLine(ctx, dataArr, config);
   });
+
+  drawXLineText(ctx, config);
   // draw vertical line
 
   // draw asisX
@@ -99,15 +101,22 @@ function drawXLineText(ctx, config) {
   const { viewHeight, viewWidth, columnsCount, padding, xCoords } = config;
   const step = viewWidth / columnsCount;
 
-  console.log(config);
   ctx.save();
   ctx.beginPath();
   ctx.font = 'normal 20px Helvetica, sans-serif';
   ctx.fillStyle = '#fff';
 
-  for (let j = 0; j <= columnsCount; j++) {
-    const x = Math.floor(step * j + padding);
-    ctx.fillText('15:35', x - padding / 2, viewHeight + padding * 2);
+  const coef = Math.round(xCoords.length / columnsCount) - 1;
+  let j = 0;
+  
+  for (let k = 0; k < xCoords.length; k++) {
+    const element = xCoords[k];
+
+    if (k % coef === 0) {
+      const x = Math.floor(step * j + padding);
+      ctx.fillText(toDate(element), x - padding + 5, viewHeight + padding * 2 - 10);
+      j++;
+    }
   }
 
   ctx.stroke();
